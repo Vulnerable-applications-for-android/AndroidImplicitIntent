@@ -9,7 +9,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 /**
- * Test Thred-up vulnerability.
+ * Test app content deep linking vulnerability.
  *
  * - Test the deep linking vulnerability function of intent-filters.
  *
@@ -64,14 +64,14 @@ public class MainActivity extends AppCompatActivity {
 
     protected Intent startDispatcher() {
         final Intent startIntent = new Intent(Intent.ACTION_VIEW);
-        startIntent.setData(Uri.parse("scrappers://browser/?url=https://thredup.com/"));
+        startIntent.setData(Uri.parse("scrappers://browser/?url=https://github.com/"));
         return startIntent;
     }
 
     protected final void processIntent(final Intent intent) {
         final Uri intentData = intent.getData();
         final String formattedUri = intentData.toString();
-        // scrappers://browser/?url=https://auth.thredup.com/"
+        // scrappers://browser/?url=https://github.com/"
         final String command = formattedUri.substring(formattedUri.indexOf(":"));
         if (command.contains("//browser/?url=")) {
             final String url = formattedUri.substring(formattedUri.indexOf("https"));
@@ -82,9 +82,10 @@ public class MainActivity extends AppCompatActivity {
     protected final void processIntentSuggestedFix(final Intent intent) {
         final Uri intentData = intent.getData();
         final String formattedUri = intentData.toString();
-        // scrappers://browser/?url=https://auth.thredup.com/"
+        // scrappers://browser/?url=https://github.com/"
         final String command = formattedUri.substring(formattedUri.indexOf(":"));
-        if (command.contains("//browser/?url=https://thredup.com/")) {
+        /* restricts the link to github only */
+        if (command.contains("//browser/?url=https://github.com/")) {
             final String url = formattedUri.substring(formattedUri.indexOf("https"));
             webView.loadUrl(url);
         }
